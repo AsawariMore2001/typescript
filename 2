@@ -19,7 +19,7 @@ class VehicleService {
   }
 
   deleteVehicle(id: number): void {
-    const index = this.vehicles.findIndex((vehicle) => vehicle.id === id);
+    const index = this.vehicles.findIndex((vehicle: Vehicle) => vehicle.id === id);
     if (index !== -1) {
       this.vehicles.splice(index, 1);
       console.log('Vehicle deleted successfully.');
