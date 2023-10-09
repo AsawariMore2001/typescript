@@ -1,0 +1,97 @@
+// Class for Vehicle
+class Vehicle {
+    constructor(public id: number, public make: string, public model: string) {}
+  
+    getDetails(): string {
+      return `ID: ${this.id}, Make: ${this.make}, Model: ${this.model}`;
+    }
+  }
+  
+  // Service class for managing vehicles
+  class VehicleService {
+    private vehicles: Vehicle[] = [];
+  
+    addVehicle(make: string, model: string): void {
+      const id = this.generateUniqueId();
+      const vehicle = new Vehicle(id, make, model);
+      this.vehicles.push(vehicle);
+      console.log('Vehicle added successfully.');
+    }
+  
+    deleteVehicle(id: number): void {
+      const index = this.vehicles.findIndex((vehicle) => vehicle.id === id);
+      if (index !== -1) {
+        this.vehicles.splice(index, 1);
+        console.log('Vehicle deleted successfully.');
+      } else {
+        console.log('Vehicle not found.');
+      }
+    }
+  
+    showVehicles(): void {
+      if (this.vehicles.length === 0) {
+        console.log('No vehicles to display.');
+      } else {
+        console.log('List of Vehicles:');
+        this.vehicles.forEach((vehicle) => {
+          console.log(vehicle.getDetails());
+        });
+      }
+    }
+  
+    private generateUniqueId(): number {
+      // Generate a unique ID (for simplicity, just incrementing from 1)
+      return this.vehicles.length + 1;
+    }
+  }
+  
+  // Class for Vehicle Application
+  class VehicleApp {
+    constructor(private vehicleService: VehicleService) {}
+  
+    displayFunctions(): void {
+      console.log('Vehicle Functions:');
+      console.log('1. Add Vehicle');
+      console.log('2. Delete Vehicle by ID');
+      console.log('3. Show List of Vehicles');
+      console.log('4. Exit');
+    }
+  
+    run(): void {
+      console.log('Welcome to the Vehicle Management App!');
+      let choice: number;
+  
+      do {
+        this.displayFunctions();
+        choice = Number(prompt('Enter your choice (1/2/3/4):'));
+  
+        switch (choice) {
+          case 1:
+            const make = prompt('Enter the make of the vehicle:');
+            const model = prompt('Enter the model of the vehicle:');
+            this.vehicleService.addVehicle(make, model);
+            break;
+          case 2:
+            const idToDelete = Number(prompt('Enter the ID of the vehicle to delete:'));
+            this.vehicleService.deleteVehicle(idToDelete);
+            break;
+          case 3:
+            this.vehicleService.showVehicles();
+            break;
+          case 4:
+            console.log('Exiting the Vehicle Management App.');
+            break;
+          default:
+            console.log('Invalid choice. Please try again.');
+        }
+      } while (choice !== 4);
+    }
+  }
+  
+  // Usage
+  const vehicleService = new VehicleService();
+  const vehicleApp = new VehicleApp(vehicleService);
+  
+  // Run the Vehicle Application
+  vehicleApp.run();
+  
