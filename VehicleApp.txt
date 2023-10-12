@@ -15,3 +15,58 @@ manager.addVehicleDetails(2, 'Motorcycle', 'Harley-Davidson');
 manager.addVehicleDetails(3, 'Car', 'Ford');
 
 manager.displayAllVehicleDetails();
+//////////////////////////////////////////////////////
+class Vehicle {
+  constructor(public id: number, public type: string, public brand: string) {}
+}
+
+class VehicleManager {
+  private vehicles: Vehicle[] = [];
+
+  addNewVehicleType(type: string) {
+    if (!this.vehicles.some((vehicle) => vehicle.type === type)) {
+      this.vehicles.push(new Vehicle(this.vehicles.length + 1, type, ''));
+      console.log(`New vehicle type "${type}" added.`);
+    } else {
+      console.log(`Vehicle type "${type}" already exists.`);
+    }
+  }
+
+  displayVehicleTypes() {
+    console.log('Vehicle Types:');
+    this.vehicles.forEach((vehicle) => {
+      console.log(`ID: ${vehicle.id}, Type: ${vehicle.type}`);
+    });
+  }
+
+  addVehicleDetails(id: number, type: string, brand: string) {
+    const vehicle = this.vehicles.find((v) => v.id === id && v.type === type);
+    if (vehicle) {
+      vehicle.brand = brand;
+      console.log(`Vehicle details updated: ID: ${id}, Type: ${type}, Brand: ${brand}`);
+    } else {
+      console.log('Vehicle not found. Please check the ID and type.');
+    }
+  }
+
+  displayAllVehicleDetails() {
+    console.log('All Vehicle Details:');
+    this.vehicles.forEach((vehicle) => {
+      console.log(`ID: ${vehicle.id}, Type: ${vehicle.type}, Brand: ${vehicle.brand}`);
+    });
+  }
+}
+
+const manager = new VehicleManager();
+
+manager.addNewVehicleType('Car');
+manager.addNewVehicleType('Motorcycle');
+manager.addNewVehicleType('Truck');
+
+manager.displayVehicleTypes();
+
+manager.addVehicleDetails(1, 'Car', 'Toyota');
+manager.addVehicleDetails(2, 'Motorcycle', 'Harley-Davidson');
+manager.addVehicleDetails(3, 'Car', 'Ford');
+
+manager.displayAllVehicleDetails();
