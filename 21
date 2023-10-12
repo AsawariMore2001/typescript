@@ -1,96 +1,45 @@
-// Class for Vehicle
-class Vehicle {
-  constructor(public id: number, public make: string, public model: string) {}
+// VehicleManager.ts
 
-  getDetails(): string {
-    return `ID: ${this.id}, Make: ${this.make}, Model: ${this.model}`;
-  }
+class Vehicle {
+  constructor(public id: number, public type: string, public brand: string) {}
 }
 
-// Service class for managing vehicles
-class VehicleService {
+class VehicleManager {
   private vehicles: Vehicle[] = [];
 
-  addVehicle(make: string, model: string): void {
-    const id = this.generateUniqueId();
-    const vehicle = new Vehicle(id, make, model);
-    this.vehicles.push(vehicle);
-    console.log('Vehicle added successfully.');
-  }
-
-  deleteVehicle(id: number): void {
-    const index = this.vehicles.findIndex((vehicle: Vehicle) => vehicle.id === id);
-    if (index !== -1) {
-      this.vehicles.splice(index, 1);
-      console.log('Vehicle deleted successfully.');
+  addNewVehicleType(type: string) {
+    // Check if the type already exists
+    if (!this.vehicles.some((vehicle) => vehicle.type === type)) {
+      this.vehicles.push(new Vehicle(this.vehicles.length + 1, type, ''));
+      console.log(`New vehicle type "${type}" added.`);
     } else {
-      console.log('Vehicle not found.');
+      console.log(`Vehicle type "${type}" already exists.`);
     }
   }
 
-  showVehicles(): void {
-    if (this.vehicles.length === 0) {
-      console.log('No vehicles to display.');
+  displayVehicleTypes() {
+    console.log('Vehicle Types:');
+    this.vehicles.forEach((vehicle) => {
+      console.log(`ID: ${vehicle.id}, Type: ${vehicle.type}`);
+    });
+  }
+
+  addVehicleDetails(id: number, type: string, brand: string) {
+    const vehicle = this.vehicles.find((v) => v.id === id && v.type === type);
+    if (vehicle) {
+      vehicle.brand = brand;
+      console.log(`Vehicle details updated: ID: ${id}, Type: ${type}, Brand: ${brand}`);
     } else {
-      console.log('List of Vehicles:');
-      this.vehicles.forEach((vehicle) => {
-        console.log(vehicle.getDetails());
-      });
+      console.log('Vehicle not found. Please check the ID and type.');
     }
   }
 
-  private generateUniqueId(): number {
-    // Generate a unique ID (for simplicity, just incrementing from 1)
-    return this.vehicles.length + 1;
+  displayAllVehicleDetails() {
+    console.log('All Vehicle Details:');
+    this.vehicles.forEach((vehicle) => {
+      console.log(`ID: ${vehicle.id}, Type: ${vehicle.type}, Brand: ${vehicle.brand}`);
+    });
   }
 }
 
-// Class for Vehicle Application
-class VehicleApp {
-  constructor(private vehicleService: VehicleService) {}
-
-  displayFunctions(): void {
-    console.log('Vehicle Functions:');
-    console.log('1. Add Vehicle');
-    console.log('2. Delete Vehicle by ID');
-    console.log('3. Show List of Vehicles');
-    console.log('4. Exit');
-  }
-
-  run(): void {
-    console.log('Welcome to the Vehicle Management App!');
-    let choice: number;
-
-    do {
-      this.displayFunctions();
-      choice = Number(prompt('Enter your choice (1/2/3/4):'));
-
-      switch (choice) {
-        case 1:
-          const make = prompt('Enter the make of the vehicle:');
-          const model = prompt('Enter the model of the vehicle:');
-          this.vehicleService.addVehicle(make, model);
-          break;
-        case 2:
-          const idToDelete = Number(prompt('Enter the ID of the vehicle to delete:'));
-          this.vehicleService.deleteVehicle(idToDelete);
-          break;
-        case 3:
-          this.vehicleService.showVehicles();
-          break;
-        case 4:
-          console.log('Exiting the Vehicle Management App.');
-          break;
-        default:
-          console.log('Invalid choice. Please try again.');
-      }
-    } while (choice !== 4);
-  }
-}
-
-// Usage
-const vehicleService = new VehicleService();
-const vehicleApp = new VehicleApp(vehicleService);
-
-// Run the Vehicle Application
-vehicleApp.run();
+export default VehicleManager;
